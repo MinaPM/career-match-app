@@ -2,10 +2,20 @@ from bs4 import BeautifulSoup
 import requests
 import json
 
-'''json_string = json.dumps(data)
-print(type(json_string))
-print(json_string)'''
+def print_message(message, showKeys=False):
+    if showKeys:
+        for key, value in message.items():
+            print(key + ":", value)
+    else:
+        for value in message.values():
+            print(value)
 
+def insert_job(data):
+        response = requests.post(API_URL+"/add_job", json=data)
+        message = response.json()
+        print_message(message)
+
+API_URL = "http://3.86.34.32:5000"
 r = requests.get("https://www.4cornerresources.com/job-descriptions/")
 if(r.status_code == 200):
     print("success")
@@ -27,7 +37,11 @@ if(r.status_code == 200):
                 desc += acc.find_all("li")
             for d in desc:
                 description += d.get_text()
-            #print(description)
+            insert_job({title: description})
+    
+    
+
+   
 
     
             
